@@ -1,0 +1,181 @@
+<html>
+
+<head>
+  <title>Insert/Modify Link</title>
+  <script type="text/javascript" src="popup.js"></script>
+  <script type="text/javascript">
+    window.resizeTo(400, 200);
+
+I18N = window.opener.HTMLArea.I18N.dialogs;
+
+function i18n(str) {
+  return (I18N[str] || str);
+};
+
+function Init() {
+  __dlg_translate(I18N);
+  __dlg_init();
+
+  //var param = window.dialogArguments;
+  //if (param) 
+  //  if ( typeof param["f_href"] != "undefined" ) 
+  //    document.getElementById("f_title").value = param["f_title"];
+
+  var use_target = true;
+
+  document.getElementById("f_href").focus();
+  document.getElementById("f_href").select();
+};
+
+function onOK() {
+
+  // pass data back to the calling window
+  var fields = ["groupdocs_file_id", "width", "height","f_href", "f_title","f_target" ];
+  var param = new Object();
+  for (var i in fields) {
+    var id = fields[i];
+    var el = document.getElementById(id);
+    param[id] = el.value;
+  }
+
+param["groupdocs_file_id"] = 'dfg';
+//f_other_target
+  __dlg_close(param);
+  return false;
+};
+
+function onCancel() {
+  __dlg_close(null);
+  return false;
+};
+
+</script>
+
+<style type="text/css">
+html, body {
+  background: ButtonFace;
+  color: ButtonText;
+  font: 11px Tahoma,Verdana,sans-serif;
+  margin: 0px;
+  padding: 0px;
+}
+body { padding: 5px; }
+table {
+  font: 11px Tahoma,Verdana,sans-serif;
+}
+select, input, button { font: 11px Tahoma,Verdana,sans-serif; }
+button { width: 70px; }
+table .label { text-align: right; width: 8em; }
+
+.title { background: #ddf; color: #000; font-weight: bold; font-size: 120%; padding: 3px 10px; margin-bottom: 10px;
+border-bottom: 1px solid black; letter-spacing: 2px;
+}
+
+#buttons {
+      margin-top: 1em; border-top: 1px solid #999;
+      padding: 2px; text-align: right;
+}
+</style>
+
+</head>
+
+<body onload="Init()">
+<div class="title">Insert/Modify Link</div>
+<form>
+<table border="0" style="width: 100%;">
+  <tr>
+    <td class="label">File ID:</td>
+    <td><input type="text" id="groupdocs_file_id" style="width: 100%" /></td>
+  </tr>
+  <tr>
+    <td class="label">Width:</td>
+    <td><input type="text" id="width" style="width: 100%" /></td>
+  </tr>
+  <tr>
+    <td class="label">Height:</td>
+    <td><input type="text" id="height" style="width: 100%" /></td>
+  </tr>
+  <tr>
+    <td><!------ to pass validation ------>
+	<input type="text" id="f_href" style="width: 100%"  style="visibility: hidden"/>
+	<input type="text" id="f_title" style="width: 100%"  style="visibility: hidden"/>
+    <input type="text" name="f_other_target" id="f_target" size="10" style="visibility: hidden" />
+    </td>
+  </tr>
+</table>
+
+<div id="buttons">
+  <button type="submit" name="ok" onclick="return onOK();">OK</button>
+  <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
+</div>
+</form>
+</body>
+</html>
+
+<script>
+function print_r (array, return_val) {
+    // Prints out or returns information about the specified variable  
+    // 
+    // version: 1109.2015
+    // discuss at: http://phpjs.org/functions/print_r    // +   original by: Michael White (http://getsprink.com)
+    // +   improved by: Ben Bryan
+    // +      input by: Brett Zamir (http://brett-zamir.me)
+    // +      improved by: Brett Zamir (http://brett-zamir.me)
+    // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)    // -    depends on: echo
+    // *     example 1: print_r(1, true);
+    // *     returns 1: 1
+    var output = '',
+        pad_char = ' ',        pad_val = 4,
+        d = this.window.document,
+        getFuncName = function (fn) {
+            var name = (/\W*function\s+([\w\$]+)\s*\(/).exec(fn);
+            if (!name) {                return '(Anonymous)';
+            }
+            return name[1];
+        },
+        repeat_char = function (len, pad_char) {            var str = '';
+            for (var i = 0; i < len; i++) {
+                str += pad_char;
+            }
+            return str;        },
+        formatArray = function (obj, cur_depth, pad_val, pad_char) {
+            if (cur_depth > 0) {
+                cur_depth++;
+            } 
+            var base_pad = repeat_char(pad_val * cur_depth, pad_char);
+            var thick_pad = repeat_char(pad_val * (cur_depth + 1), pad_char);
+            var str = '';
+             if (typeof obj === 'object' && obj !== null && obj.constructor && getFuncName(obj.constructor) !== 'PHPJS_Resource') {
+                str += 'Array\n' + base_pad + '(\n';
+                for (var key in obj) {
+                    if (Object.prototype.toString.call(obj[key]) === '[object Array]') {
+                        str += thick_pad + '[' + key + '] => ' + formatArray(obj[key], cur_depth + 1, pad_val, pad_char);                    }
+                    else {
+                        str += thick_pad + '[' + key + '] => ' + obj[key] + '\n';
+                    }
+                }                str += base_pad + ')\n';
+            }
+            else if (obj === null || obj === undefined) {
+                str = '';
+            }            else { // for our "resource" class
+                str = obj.toString();
+            }
+ 
+            return str;        };
+ 
+    output = formatArray(array, 0, pad_val, pad_char);
+ 
+    if (return_val !== true) {        if (d.body) {
+            this.echo(output);
+        }
+        else {
+            try {                d = XULDocument; // We're in XUL, so appending as plain text won't work; trigger an error out of XUL
+                this.echo('<pre xmlns="http://www.w3.org/1999/xhtml" style="white-space:pre;">' + output + '</pre>');
+            } catch (e) {
+                this.echo(output); // Outputting as plain text may work in some plain XML
+            }        }
+        return true;
+    }
+    return output;
+}
+</script>

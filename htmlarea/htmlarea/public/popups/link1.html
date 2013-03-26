@@ -1,0 +1,124 @@
+<html>
+
+<head>
+  <title>Insert/Modify Link</title>
+  <script type="text/javascript" src="popup.js"></script>
+
+  <script type="text/javascript">
+    //window.resizeTo(300, 60);
+
+  editor = new HTMLArea("ta");
+  var cfg = editor.config; // this is the default configuration
+
+//function i18n(str) {
+//  return (I18N[str] || str);
+//};
+
+
+function Init() {
+  //__dlg_translate(I18N);
+  //__dlg_init();
+  var param = window.dialogArguments;
+
+  if (param) {
+
+    if ( typeof param["groupdocs_file_id"] != "undefined" ) {
+
+      document.getElementById("groupdocs_file_id").value = param["groupdocs_file_id"];
+      document.getElementById("width").value = param["width"];
+      document.getElementById("height").value = param["height"];
+    }
+  }
+
+  //opt.innerHTML = i18n("groupdocs");
+  document.getElementById("f_href").focus();
+  document.getElementById("f_href").select();
+};
+
+function onOK() {
+  var required = {
+    // f_href shouldn't be required or otherwise removing the link by entering an empty
+    // url isn't possible anymore.
+    // "f_href": i18n("You must enter the URL where this link points to")
+  };
+  for (var i in required) {
+    var el = document.getElementById(i);
+    if (!el.value) {
+      alert(required[i]);
+      el.focus();
+      return false;
+    }
+  }
+  // pass data back to the calling window
+  var fields = ["groupdocs_file_id", "width", "height" ];
+  var param = new Object();
+  for (var i in fields) {
+    var id = fields[i];
+    var el = document.getElementById(id);
+    param[id] = el.value;
+  }
+
+  __dlg_close(param);
+  return false;
+};
+
+function onCancel() {
+  __dlg_close(null);
+  return false;
+};
+
+</script>
+
+<style type="text/css">
+html, body {
+  background: ButtonFace;
+  color: ButtonText;
+  font: 11px Tahoma,Verdana,sans-serif;
+  margin: 0px;
+  padding: 0px;
+}
+body { padding: 5px; }
+table {
+  font: 11px Tahoma,Verdana,sans-serif;
+}
+select, input, button { font: 11px Tahoma,Verdana,sans-serif;width: 170px; }
+button { width: 70px; }
+table .label { text-align: right; width: 8em; }
+
+.title { background: #ddf; color: #000; font-weight: bold; font-size: 120%; padding: 3px 10px; margin-bottom: 10px;
+border-bottom: 1px solid black; letter-spacing: 2px;
+}
+
+#buttons {
+      margin-top: 1em; border-top: 1px solid #999;
+      padding: 2px; text-align: right;
+}
+</style>
+
+</head>
+
+<body onload="Init()">
+<div class="title">Insert/Modify Link</div>
+<form>
+<table border="0" style="width: 100%;">
+  <tr>
+    <td class="label">File ID:</td>
+    <td><input type="text" id="groupdocs_file_id" style="width: 100%" /></td>
+  </tr>
+  <tr>
+    <td class="label">Width:</td>
+    <td><input type="text" id="width" style="width: 100%" /></td>
+  </tr>
+  <tr>
+    <td class="label">Height:</td>
+    <td><input type="text" id="height" style="width: 100%" /></td>
+  </tr>
+</table>
+
+<div id="buttons">
+  <button type="submit" name="ok" onclick="return onOK();">OK</button>
+  <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
+</div>
+</form>
+</body>
+</html>
